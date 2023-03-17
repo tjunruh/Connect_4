@@ -382,6 +382,8 @@ void connect4_operations::human_game_loop(string (&board)[6][7]) {
 	player_turn = 1;
 	ai_player = -1;
 	human_player = -1;
+	last_ai_x_position = -1;
+	last_ai_y_position = -1;
 
 	cout << "Connect 4: \n\n";
 	cout << "Type in your player name, player 1.\n" << endl;
