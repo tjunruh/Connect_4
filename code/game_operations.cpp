@@ -1,13 +1,11 @@
 #include "game_operations.h"
+#include "io.h"
 #include <string>
-#include <iostream>
-#include <conio.h>
-#include <chrono>
 #include <thread>
 #include <time.h>
 using namespace std;
 
-void connect4_operations::initialize_board(string (&board)[6][7]) {
+void connect4_operations::initialize_board(string(&board)[6][7]) {
 	for (int i = 0; i < 6; i++) {
 		for (int j = 0; j < 7; j++) {
 			board[i][j] = " . |";
@@ -24,7 +22,7 @@ void connect4_operations::copy_board(string(&board)[6][7], string(&board_copy)[6
 }
 
 
-bool connect4_operations::place_piece(int player, int column, string (&board)[6][7]) {
+bool connect4_operations::place_piece(int player, int column, string(&board)[6][7]) {
 	column--;
 	string player_slot = "";
 	if (player == 1) {
@@ -100,7 +98,7 @@ void connect4_operations::print_board(string board[6][7]) {
 	}
 
 	board_to_print = board_to_print + "============================\n\n";
-	cout << board_to_print << endl;
+	connect4_io::print(board_to_print);
 }
 
 bool connect4_operations::check_winner(int player, string board[6][7]) {
@@ -113,7 +111,7 @@ bool connect4_operations::check_winner(int player, string board[6][7]) {
 		(board[last_ai_y_position][last_ai_x_position])[0] = ' ';
 		(board[last_ai_y_position][last_ai_x_position])[2] = ' ';
 	}
-	
+
 	rows = rows_check_winner(player, board);
 	columns = columns_check_winner(player, board);
 	diagonal = diagonal_check_winner(player, board);
@@ -122,7 +120,7 @@ bool connect4_operations::check_winner(int player, string board[6][7]) {
 		(board[last_ai_y_position][last_ai_x_position])[0] = '-';
 		(board[last_ai_y_position][last_ai_x_position])[2] = '-';
 	}
-	
+
 	if (rows || columns || diagonal) {
 		winner = true;
 	}
@@ -370,7 +368,7 @@ bool connect4_operations::cat_game(string board[6][7]) {
 	return cat_game;
 }
 
-void connect4_operations::human_game_loop(string (&board)[6][7]) {
+void connect4_operations::human_game_loop(string(&board)[6][7]) {
 	string p1_username = "";
 	string p2_username = "";
 	bool winner = false;
@@ -385,28 +383,28 @@ void connect4_operations::human_game_loop(string (&board)[6][7]) {
 	last_ai_x_position = -1;
 	last_ai_y_position = -1;
 
-	cout << "Connect 4: \n\n";
-	cout << "Type in your player name, player 1.\n" << endl;
-	getline(cin >> ws, p1_username);
-	cout << "Type in your player name, player 2\n" << endl;
-	getline(cin >> ws, p2_username);
+	connect4_io::print("Connect 4: \n\n");
+	connect4_io::print("Type in your player name, player 1.\n");
+	p1_username = connect4_io::getline();
+	connect4_io::print("Type in your player name, player 2\n");
+	p2_username = connect4_io::getline();
 
-	system("CLS");
+	connect4_io::clear();
 	while ((winner == false) && (tie == false)) {
-		system("CLS");
+		connect4_io::reset();
 		print_board(board);
 
 		do {
 			if (player_turn == 1) {
-				cout << p1_username + ":\nPlace a piece by typing which column.\n";
+				connect4_io::print(p1_username + ":\nPlace a piece by typing which column.\n");
 			}
 			else {
-				cout << p2_username + ":\nPlace a piece by typing which column.\n";
+				connect4_io::print(p2_username + ":\nPlace a piece by typing which column.\n");
 			}
-			input = _getch();
+			input = connect4_io::getchar();
 			column = input - 48;
 			if ((column != 1) && (column != 2) && (column != 3) && (column != 4) && (column != 5) && (column != 6) && (column != 7)) {
-				cout << "Column does not exist.\n" << endl;
+				connect4_io::print("Column does not exist.\n");
 				column_exist = false;
 			}
 			else {
@@ -418,20 +416,20 @@ void connect4_operations::human_game_loop(string (&board)[6][7]) {
 
 		winner = check_winner(player_turn, board);
 		if (winner) {
-			system("CLS");
+			connect4_io::reset();
 			print_board(board);
 			if (player_turn == 1) {
-				cout << p1_username + " won!\n";
+				connect4_io::print(p1_username + " won!\n");
 			}
 			else {
-				cout << p2_username + " won\n";
+				connect4_io::print(p2_username + " won\n");
 			}
 		}
 		tie = cat_game(board);
 		if (tie) {
-			system("CLS");
+			connect4_io::reset();
 			print_board(board);
-			cout << "cat game\n" << endl;
+			connect4_io::print("cat game\n");
 		}
 
 		if (player_turn == 1) {
@@ -443,7 +441,7 @@ void connect4_operations::human_game_loop(string (&board)[6][7]) {
 	}
 }
 
-void connect4_operations::minimax(string (&board)[6][7], int& column, int& value, int depth, int alpha, int beta, bool maximizing_player) {
+void connect4_operations::minimax(string(&board)[6][7], int& column, int& value, int depth, int alpha, int beta, bool maximizing_player) {
 	int open_columns[7];
 	bool is_terminal = false;
 	int num_open_columns = 0;
@@ -689,11 +687,11 @@ void connect4_operations::hard_computer_game_loop(string(&board)[6][7]) {
 	last_ai_x_position = -1;
 	last_ai_y_position = -1;
 
-	cout << "Would you like to go first or second (type 1 or 2)?" << endl;
+	connect4_io::print("Would you like to go first or second (type 1 or 2)?\n");
 	while ((input != 1) && (input != 2)) {
-		input = _getch() - 48;
+		input = connect4_io::getchar() - 48;
 	}
-	
+
 	human_player = input;
 	if (human_player == 1) {
 		ai_player = 2;
@@ -702,21 +700,21 @@ void connect4_operations::hard_computer_game_loop(string(&board)[6][7]) {
 		ai_player = 1;
 	}
 
-	cout << "Type in your player name." << endl;
-	getline(cin >> ws, human_user_name);
-	
-	system("CLS");
+	connect4_io::print("Type in your player name.\n");
+	human_user_name = connect4_io::getline();
+
+	connect4_io::clear();
 	while ((winner == false) && (tie == false)) {
-		system("CLS");
+		connect4_io::reset();
 		print_board(board);
 
 		if (player_turn == human_player) {
-			cout << human_user_name + ":\nPlace a piece by typing which column.\n";
+			connect4_io::print(human_user_name + ":\nPlace a piece by typing which column.\n");
 			do {
-				input = _getch();
+				input = connect4_io::getchar();
 				column = input - 48;
 				if ((column != 1) && (column != 2) && (column != 3) && (column != 4) && (column != 5) && (column != 6) && (column != 7)) {
-					cout << "Column does not exist.\n" << endl;
+					connect4_io::print("Column does not exist.\n");
 					column_exist = false;
 				}
 				else {
@@ -727,29 +725,29 @@ void connect4_operations::hard_computer_game_loop(string(&board)[6][7]) {
 			} while (column_full || !column_exist);
 		}
 		else {
-			cout << "Computer:\nPlace a piece by typing which column.\n";
+			connect4_io::print("Computer:\nPlace a piece by typing which column.\n");
 			minimax(board, ai_drop_column, ai_value, 7, alpha, beta, true);
 			sleep_for(3500ms);
 			place_piece(ai_player, ai_drop_column, board);
 		}
-		
+
 
 		winner = check_winner(player_turn, board);
 		if (winner) {
-			system("CLS");
+			connect4_io::reset();
 			print_board(board);
 			if (player_turn == human_player) {
-				cout << human_user_name + " won!\n";
+				connect4_io::print(human_user_name + " won!\n");
 			}
 			else {
-				cout << "Computer won!\n";
+				connect4_io::print("Computer won!\n");
 			}
 		}
 		tie = cat_game(board);
 		if (tie) {
-			system("CLS");
+			connect4_io::reset();
 			print_board(board);
-			cout << "cat game\n" << endl;
+			connect4_io::print("cat game\n");
 		}
 
 		if (player_turn == 1) {
@@ -762,22 +760,22 @@ void connect4_operations::hard_computer_game_loop(string(&board)[6][7]) {
 }
 
 int connect4_operations::menu() {
-	system("CLS");
-	cout << "Welcome to Connect 4 console version!\n\n" << endl;
-	cout << "Pick a game mode:\n" << endl;
-	cout << "MULTIPLAYER" << endl;
-	cout << "0 -> multiplayer" << endl;
-	cout << "SINGLE PLAYER" << endl;
-	cout << "1 -> easy" << endl;
-	cout << "2 -> moderate" << endl;
-	cout << "3 -> hard" << endl;
+	connect4_io::clear();
+	connect4_io::print("Welcome to Connect 4 console version!\n\n");
+	connect4_io::print("Pick a game mode:\n");
+	connect4_io::print("MULTIPLAYER\n");
+	connect4_io::print("0 -> multiplayer\n");
+	connect4_io::print("SINGLE PLAYER\n");
+	connect4_io::print("1 -> easy\n");
+	connect4_io::print("2 -> moderate\n");
+	connect4_io::print("3 -> hard\n");
 
 	int input = -1;
 
 	while ((input != 0) && (input != 1) && (input != 2) && (input != 3)) {
-		input = _getch() - 48;
+		input = connect4_io::getchar() - 48;
 	}
-	
+
 	return input;
 }
 
@@ -817,7 +815,7 @@ void connect4_operations::run_easy_bot(string(&board)[6][7]) {
 	}
 }
 
-void connect4_operations::easy_computer_game_loop(string (&board)[6][7]) {
+void connect4_operations::easy_computer_game_loop(string(&board)[6][7]) {
 	using namespace std::this_thread;
 	using namespace std::chrono;
 	int input = 0;
@@ -833,9 +831,9 @@ void connect4_operations::easy_computer_game_loop(string (&board)[6][7]) {
 	last_ai_x_position = -1;
 	last_ai_y_position = -1;
 
-	cout << "Would you like to go first or second (type 1 or 2)?" << endl;
+	connect4_io::print("Would you like to go first or second (type 1 or 2)?\n");
 	while ((input != 1) && (input != 2)) {
-		input = _getch() - 48;
+		input = connect4_io::getchar() - 48;
 	}
 
 	human_player = input;
@@ -846,21 +844,21 @@ void connect4_operations::easy_computer_game_loop(string (&board)[6][7]) {
 		ai_player = 1;
 	}
 
-	cout << "Type in your player name." << endl;
-	getline(cin >> ws, human_user_name);
+	connect4_io::print("Type in your player name.\n");
+	human_user_name = connect4_io::getline();
 
-	system("CLS");
+	connect4_io::clear();
 	while ((winner == false) && (tie == false)) {
-		system("CLS");
+		connect4_io::reset();
 		print_board(board);
 
 		if (player_turn == human_player) {
-			cout << human_user_name + ":\nPlace a piece by typing which column.\n";
+			connect4_io::print(human_user_name + ":\nPlace a piece by typing which column.\n");
 			do {
-				input = _getch();
+				input = connect4_io::getchar();
 				column = input - 48;
 				if ((column != 1) && (column != 2) && (column != 3) && (column != 4) && (column != 5) && (column != 6) && (column != 7)) {
-					cout << "Column does not exist.\n" << endl;
+					connect4_io::print("Column does not exist.\n");
 					column_exist = false;
 				}
 				else {
@@ -871,7 +869,7 @@ void connect4_operations::easy_computer_game_loop(string (&board)[6][7]) {
 			} while (column_full || !column_exist);
 		}
 		else {
-			cout << "Computer:\nPlace a piece by typing which column.\n";
+			connect4_io::print("Computer:\nPlace a piece by typing which column.\n");
 			run_easy_bot(board);
 			sleep_for(3500ms);
 			place_piece(ai_player, ai_drop_column, board);
@@ -880,20 +878,20 @@ void connect4_operations::easy_computer_game_loop(string (&board)[6][7]) {
 
 		winner = check_winner(player_turn, board);
 		if (winner) {
-			system("CLS");
+			connect4_io::reset();
 			print_board(board);
 			if (player_turn == human_player) {
-				cout << human_user_name + " won!\n";
+				connect4_io::print(human_user_name + " won!\n");
 			}
 			else {
-				cout << "Computer won!\n";
+				connect4_io::print("Computer won!\n");
 			}
 		}
 		tie = cat_game(board);
 		if (tie) {
-			system("CLS");
+			connect4_io::reset();
 			print_board(board);
-			cout << "cat game\n" << endl;
+			connect4_io::print("cat game\n");
 		}
 
 		if (player_turn == 1) {
@@ -923,9 +921,9 @@ void connect4_operations::moderate_computer_game_loop(string(&board)[6][7]) {
 	last_ai_x_position = -1;
 	last_ai_y_position = -1;
 
-	cout << "Would you like to go first or second (type 1 or 2)?" << endl;
+	connect4_io::print("Would you like to go first or second (type 1 or 2)?\n");
 	while ((input != 1) && (input != 2)) {
-		input = _getch() - 48;
+		input = connect4_io::getchar() - 48;
 	}
 
 	human_player = input;
@@ -936,21 +934,21 @@ void connect4_operations::moderate_computer_game_loop(string(&board)[6][7]) {
 		ai_player = 1;
 	}
 
-	cout << "Type in your player name." << endl;
-	getline(cin >> ws, human_user_name);
+	connect4_io::print("Type in your player name.\n");
+	human_user_name = connect4_io::getline();
 
-	system("CLS");
+	connect4_io::clear();
 	while ((winner == false) && (tie == false)) {
-		system("CLS");
+		connect4_io::reset();
 		print_board(board);
 
 		if (player_turn == human_player) {
-			cout << human_user_name + ":\nPlace a piece by typing which column.\n";
+			connect4_io::print(human_user_name + ":\nPlace a piece by typing which column.\n");
 			do {
-				input = _getch();
+				input = connect4_io::getchar();
 				column = input - 48;
 				if ((column != 1) && (column != 2) && (column != 3) && (column != 4) && (column != 5) && (column != 6) && (column != 7)) {
-					cout << "Column does not exist.\n" << endl;
+					connect4_io::print("Column does not exist.\n");
 					column_exist = false;
 				}
 				else {
@@ -961,7 +959,7 @@ void connect4_operations::moderate_computer_game_loop(string(&board)[6][7]) {
 			} while (column_full || !column_exist);
 		}
 		else {
-			cout << "Computer:\nPlace a piece by typing which column.\n";
+			connect4_io::print("Computer:\nPlace a piece by typing which column.\n");
 			minimax(board, ai_drop_column, ai_value, 2, alpha, beta, true);
 			sleep_for(3500ms);
 			place_piece(ai_player, ai_drop_column, board);
@@ -970,20 +968,20 @@ void connect4_operations::moderate_computer_game_loop(string(&board)[6][7]) {
 
 		winner = check_winner(player_turn, board);
 		if (winner) {
-			system("CLS");
+			connect4_io::reset();
 			print_board(board);
 			if (player_turn == human_player) {
-				cout << human_user_name + " won!\n";
+				connect4_io::print(human_user_name + " won!\n");
 			}
 			else {
-				cout << "Computer won!\n";
+				connect4_io::print("Computer won!\n");
 			}
 		}
 		tie = cat_game(board);
 		if (tie) {
-			system("CLS");
+			connect4_io::reset();
 			print_board(board);
-			cout << "cat game\n" << endl;
+			connect4_io::print("cat game\n");
 		}
 
 		if (player_turn == 1) {

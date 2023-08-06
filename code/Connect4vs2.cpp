@@ -3,7 +3,7 @@
 
 #include "game_operations.h"
 #include <string>
-#include <iostream>
+#include "io.h"
 
 int main()
 {
@@ -29,9 +29,9 @@ int main()
         }
 
         play_more = "";
-        cout << "Play again?\ntype y or n.\n" << endl;
+        connect4_io::print("Play again?\ntype y or n.\n");
         while ((play_more != "y") && (play_more != "n")) {
-            getline(cin >> ws, play_more);
+            play_more = connect4_io::getline();
         }
     }
     
