@@ -4,9 +4,19 @@
 #include "game_operations.h"
 #include <string>
 #include "io.h"
+#ifdef __linux__
+#include <unistd.h>
+#include <ncurses.h>
+#endif
 
 int main()
 {
+#ifdef __linux__
+    initscr();
+    raw();
+    noecho();
+    cbreak();
+#endif
     string play_more = "";
     string board[6][7];
     connect4_operations game_manager;
@@ -35,4 +45,7 @@ int main()
         }
     }
     
+#ifdef __linux__
+    endwin();
+#endif
 }
