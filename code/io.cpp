@@ -13,6 +13,7 @@ void connect4_io::print(const std::string& output) {
 	std::cout << output;
 #elif __linux__
 	printw(output.c_str());
+	refresh();
 #endif
 }
 
@@ -36,6 +37,7 @@ void connect4_io::clear() {
 	system("cls");
 #elif __linux__
 	erase();
+	refresh();
 #endif
 }
 
@@ -51,6 +53,7 @@ void connect4_io::reset() {
 	SetConsoleCursorPosition(hOut, Position);
 #elif __linux__
 	erase();
+	refresh();
 #endif
 }
 
