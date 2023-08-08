@@ -383,10 +383,11 @@ void connect4_operations::human_game_loop(string(&board)[6][7]) {
 	human_player = -1;
 	last_ai_x_position = -1;
 	last_ai_y_position = -1;
-
-	connect4_io::print("Connect 4: \n\n");
+	
+	connect4_io::clear();
 	connect4_io::print("Type in your player name, player 1.\n");
 	p1_username = connect4_io::getline();
+	connect4_io::clear();
 	connect4_io::print("Type in your player name, player 2\n");
 	p2_username = connect4_io::getline();
 
@@ -394,18 +395,18 @@ void connect4_operations::human_game_loop(string(&board)[6][7]) {
 	while ((winner == false) && (tie == false)) {
 		connect4_io::clear();
 		print_board(board);
+		if (player_turn == 1) {
+			connect4_io::print(p1_username + ":\nPlace a piece by typing which column.\n");
+		}
+		else {
+			connect4_io::print(p2_username + ":\nPlace a piece by typing which column.\n");
+		}
 
 		do {
-			if (player_turn == 1) {
-				connect4_io::print(p1_username + ":\nPlace a piece by typing which column.\n");
-			}
-			else {
-				connect4_io::print(p2_username + ":\nPlace a piece by typing which column.\n");
-			}
+			
 			input = connect4_io::getchar();
 			column = input - 48;
 			if ((column != 1) && (column != 2) && (column != 3) && (column != 4) && (column != 5) && (column != 6) && (column != 7)) {
-				connect4_io::print("Column does not exist.\n");
 				column_exist = false;
 			}
 			else {
@@ -688,6 +689,7 @@ void connect4_operations::hard_computer_game_loop(string(&board)[6][7]) {
 	last_ai_x_position = -1;
 	last_ai_y_position = -1;
 
+	connect4_io::clear();
 	connect4_io::print("Would you like to go first or second (type 1 or 2)?\n");
 	while ((input != 1) && (input != 2)) {
 		input = connect4_io::getchar() - 48;
@@ -701,6 +703,7 @@ void connect4_operations::hard_computer_game_loop(string(&board)[6][7]) {
 		ai_player = 1;
 	}
 
+	connect4_io::clear();
 	connect4_io::print("Type in your player name.\n");
 	human_user_name = connect4_io::getline();
 
@@ -715,7 +718,6 @@ void connect4_operations::hard_computer_game_loop(string(&board)[6][7]) {
 				input = connect4_io::getchar();
 				column = input - 48;
 				if ((column != 1) && (column != 2) && (column != 3) && (column != 4) && (column != 5) && (column != 6) && (column != 7)) {
-					connect4_io::print("Column does not exist.\n");
 					column_exist = false;
 				}
 				else {
@@ -760,24 +762,40 @@ void connect4_operations::hard_computer_game_loop(string(&board)[6][7]) {
 	}
 }
 
-int connect4_operations::menu() {
-	connect4_io::clear();
-	connect4_io::print("Welcome to Connect 4 console version!\n\n");
-	connect4_io::print("Pick a game mode:\n");
-	connect4_io::print("MULTIPLAYER\n");
-	connect4_io::print("0 -> multiplayer\n");
-	connect4_io::print("SINGLE PLAYER\n");
-	connect4_io::print("1 -> easy\n");
-	connect4_io::print("2 -> moderate\n");
-	connect4_io::print("3 -> hard\n");
-
-	int input = -1;
-
-	while ((input != 0) && (input != 1) && (input != 2) && (input != 3)) {
-		input = connect4_io::getchar() - 48;
+void connect4_operations::menu(int selection) {
+	display_logo();
+	string menu_options[4] = { "Multiplayer", "Easy Computer", "Moderate Computer", "Hard Computer" };
+	for (int option = 0; option < 4; option++) {
+		if (selection == option) {
+			connect4_io::print("                                                                ");
+			connect4_io::print("* " + menu_options[option] + "\n");
+		}
+		else {
+			connect4_io::print("                                                                ");
+			connect4_io::print("  " + menu_options[option] + "\n");
+		}
 	}
+}
 
-	return input;
+void connect4_operations::display_logo() {
+	connect4_io::print(R"(________/\\\\\\\\\___________________________________________________________________________________________________________/\\\____)"
+		"\n"
+		R"( _____/\\\////////__________________________________________________________________________________________________________/\\\\\____)"
+		"\n"
+		R"(  ___/\\\/______________________________________________________________________________________/\\\_______________________/\\\/\\\____)"
+		"\n"
+		R"(   __/\\\_________________/\\\\\_____/\\/\\\\\\____/\\/\\\\\\_______/\\\\\\\\______/\\\\\\\\__/\\\\\\\\\\\________________/\\\/\/\\\____)"
+		"\n"
+		R"(    _\/\\\_______________/\\\///\\\__\/\\\////\\\__\/\\\////\\\____/\\\/////\\\___/\\\//////__\////\\\////_______________/\\\/__\/\\\____)"
+		"\n"
+		R"(     _\//\\\_____________/\\\__\//\\\_\/\\\__\//\\\_\/\\\__\//\\\__/\\\\\\\\\\\___/\\\____________\/\\\_________________/\\\\\\\\\\\\\\\\_)"
+		"\n"
+		R"(      __\///\\\__________\//\\\__/\\\__\/\\\___\/\\\_\/\\\___\/\\\_\//\\///////___\//\\\___________\/\\\_/\\____________\///////////\\\//__)"
+		"\n"
+		R"(       ____\////\\\\\\\\\__\///\\\\\/___\/\\\___\/\\\_\/\\\___\/\\\__\//\\\\\\\\\\__\///\\\\\\\\____\//\\\\\_______________________\/\\\____)"
+		"\n"
+		R"(        _______\/////////_____\/////_____\///____\///__\///____\///____\//////////_____\////////______\/////________________________\///_____)"
+		"\n\n\n");
 }
 
 void connect4_operations::run_easy_bot(string(&board)[6][7]) {
@@ -832,6 +850,7 @@ void connect4_operations::easy_computer_game_loop(string(&board)[6][7]) {
 	last_ai_x_position = -1;
 	last_ai_y_position = -1;
 
+	connect4_io::clear();
 	connect4_io::print("Would you like to go first or second (type 1 or 2)?\n");
 	while ((input != 1) && (input != 2)) {
 		input = connect4_io::getchar() - 48;
@@ -845,6 +864,7 @@ void connect4_operations::easy_computer_game_loop(string(&board)[6][7]) {
 		ai_player = 1;
 	}
 
+	connect4_io::clear();
 	connect4_io::print("Type in your player name.\n");
 	human_user_name = connect4_io::getline();
 
@@ -859,7 +879,6 @@ void connect4_operations::easy_computer_game_loop(string(&board)[6][7]) {
 				input = connect4_io::getchar();
 				column = input - 48;
 				if ((column != 1) && (column != 2) && (column != 3) && (column != 4) && (column != 5) && (column != 6) && (column != 7)) {
-					connect4_io::print("Column does not exist.\n");
 					column_exist = false;
 				}
 				else {
@@ -922,6 +941,7 @@ void connect4_operations::moderate_computer_game_loop(string(&board)[6][7]) {
 	last_ai_x_position = -1;
 	last_ai_y_position = -1;
 
+	connect4_io::clear();
 	connect4_io::print("Would you like to go first or second (type 1 or 2)?\n");
 	while ((input != 1) && (input != 2)) {
 		input = connect4_io::getchar() - 48;
@@ -935,6 +955,7 @@ void connect4_operations::moderate_computer_game_loop(string(&board)[6][7]) {
 		ai_player = 1;
 	}
 
+	connect4_io::clear();
 	connect4_io::print("Type in your player name.\n");
 	human_user_name = connect4_io::getline();
 
@@ -949,7 +970,6 @@ void connect4_operations::moderate_computer_game_loop(string(&board)[6][7]) {
 				input = connect4_io::getchar();
 				column = input - 48;
 				if ((column != 1) && (column != 2) && (column != 3) && (column != 4) && (column != 5) && (column != 6) && (column != 7)) {
-					connect4_io::print("Column does not exist.\n");
 					column_exist = false;
 				}
 				else {

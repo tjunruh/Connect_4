@@ -21,10 +21,26 @@ int main()
     string board[6][7];
     connect4_operations game_manager;
     int game_mode = -1;
+    int selection = 0;
 
     while (play_more != "n") {
+        selection = 0;
         game_manager.initialize_board(board);
-        game_mode = game_manager.menu();
+        int input = -1;
+        do {
+            connect4_io::clear();
+            game_manager.menu(selection);
+            input = connect4_io::getchar();
+            if ((input == UP) && (selection != 0)) {
+                selection--;
+            }
+            else if ((input == DOWN) && (selection != 3)) {
+                selection++;
+            }
+        } while (input != ENTER);
+
+        game_mode = selection;
+
         if (game_mode == 0) {
             game_manager.human_game_loop(board);
         }

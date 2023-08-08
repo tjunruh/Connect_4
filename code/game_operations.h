@@ -12,6 +12,16 @@ using namespace std;
 #define SIX 54;
 #define SEVEN 55;
 
+#ifdef _WIN32
+#define ENTER 13
+#define UP 72
+#define DOWN 80
+#elif __linux__
+#define ENTER 10
+#define UP 65
+#define DOWN 66
+#endif
+
 class connect4_operations {
 
 private:
@@ -45,6 +55,7 @@ public:
 	bool is_terminal_node(string board[6][7]);
 	int score_position(string board[6][7], int player);
 	int evaluate_window(string window[4], int player);
-	int menu();
+	void menu(int selection);
+	void display_logo();
 	void run_easy_bot(string(&board)[6][7]);
 };
