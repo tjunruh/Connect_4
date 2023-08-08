@@ -1,8 +1,9 @@
 #include "game_operations.h"
 #include "io.h"
 #include <string>
-#include <thread>
 #include <time.h>
+#include <thread>
+#include <chrono>
 using namespace std;
 
 void connect4_operations::initialize_board(string(&board)[6][7]) {
@@ -391,7 +392,7 @@ void connect4_operations::human_game_loop(string(&board)[6][7]) {
 
 	connect4_io::clear();
 	while ((winner == false) && (tie == false)) {
-		connect4_io::reset();
+		connect4_io::clear();
 		print_board(board);
 
 		do {
@@ -416,7 +417,7 @@ void connect4_operations::human_game_loop(string(&board)[6][7]) {
 
 		winner = check_winner(player_turn, board);
 		if (winner) {
-			connect4_io::reset();
+			connect4_io::clear();
 			print_board(board);
 			if (player_turn == 1) {
 				connect4_io::print(p1_username + " won!\n");
@@ -427,7 +428,7 @@ void connect4_operations::human_game_loop(string(&board)[6][7]) {
 		}
 		tie = cat_game(board);
 		if (tie) {
-			connect4_io::reset();
+			connect4_io::clear();
 			print_board(board);
 			connect4_io::print("cat game\n");
 		}
@@ -543,7 +544,7 @@ void connect4_operations::minimax(string(&board)[6][7], int& column, int& value,
 
 }
 
-void connect4_operations::get_open_columns(int open_columns[7], string board[6][7]) {
+void connect4_operations::get_open_columns(int (&open_columns)[7], string board[6][7]) {
 	int position = 0;
 	for (int i = 0; i < 7; i++) {
 		if (board[0][i] == " . |") {
@@ -705,7 +706,7 @@ void connect4_operations::hard_computer_game_loop(string(&board)[6][7]) {
 
 	connect4_io::clear();
 	while ((winner == false) && (tie == false)) {
-		connect4_io::reset();
+		connect4_io::clear();
 		print_board(board);
 
 		if (player_turn == human_player) {
@@ -734,7 +735,7 @@ void connect4_operations::hard_computer_game_loop(string(&board)[6][7]) {
 
 		winner = check_winner(player_turn, board);
 		if (winner) {
-			connect4_io::reset();
+			connect4_io::clear();
 			print_board(board);
 			if (player_turn == human_player) {
 				connect4_io::print(human_user_name + " won!\n");
@@ -745,7 +746,7 @@ void connect4_operations::hard_computer_game_loop(string(&board)[6][7]) {
 		}
 		tie = cat_game(board);
 		if (tie) {
-			connect4_io::reset();
+			connect4_io::clear();
 			print_board(board);
 			connect4_io::print("cat game\n");
 		}
@@ -849,7 +850,7 @@ void connect4_operations::easy_computer_game_loop(string(&board)[6][7]) {
 
 	connect4_io::clear();
 	while ((winner == false) && (tie == false)) {
-		connect4_io::reset();
+		connect4_io::clear();
 		print_board(board);
 
 		if (player_turn == human_player) {
@@ -878,7 +879,7 @@ void connect4_operations::easy_computer_game_loop(string(&board)[6][7]) {
 
 		winner = check_winner(player_turn, board);
 		if (winner) {
-			connect4_io::reset();
+			connect4_io::clear();
 			print_board(board);
 			if (player_turn == human_player) {
 				connect4_io::print(human_user_name + " won!\n");
@@ -889,7 +890,7 @@ void connect4_operations::easy_computer_game_loop(string(&board)[6][7]) {
 		}
 		tie = cat_game(board);
 		if (tie) {
-			connect4_io::reset();
+			connect4_io::clear();
 			print_board(board);
 			connect4_io::print("cat game\n");
 		}
@@ -939,7 +940,7 @@ void connect4_operations::moderate_computer_game_loop(string(&board)[6][7]) {
 
 	connect4_io::clear();
 	while ((winner == false) && (tie == false)) {
-		connect4_io::reset();
+		connect4_io::clear();
 		print_board(board);
 
 		if (player_turn == human_player) {
@@ -968,7 +969,7 @@ void connect4_operations::moderate_computer_game_loop(string(&board)[6][7]) {
 
 		winner = check_winner(player_turn, board);
 		if (winner) {
-			connect4_io::reset();
+			connect4_io::clear();
 			print_board(board);
 			if (player_turn == human_player) {
 				connect4_io::print(human_user_name + " won!\n");
@@ -979,7 +980,7 @@ void connect4_operations::moderate_computer_game_loop(string(&board)[6][7]) {
 		}
 		tie = cat_game(board);
 		if (tie) {
-			connect4_io::reset();
+			connect4_io::clear();
 			print_board(board);
 			connect4_io::print("cat game\n");
 		}

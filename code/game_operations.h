@@ -41,7 +41,7 @@ public:
 	void easy_computer_game_loop(string(&board)[6][7]);
 	void moderate_computer_game_loop(string(&board)[6][7]);
 	void minimax(string(&board)[6][7], int& column, int& value, int depth, int alpha, int beta, bool maximizing_player);
-	void get_open_columns(int open_columns[7], string board[6][7]);
+	void get_open_columns(int (&open_columns)[7], string board[6][7]);
 	bool is_terminal_node(string board[6][7]);
 	int score_position(string board[6][7], int player);
 	int evaluate_window(string window[4], int player);
