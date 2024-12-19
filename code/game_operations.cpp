@@ -28,10 +28,6 @@ void connect4_operations::human_game_loop(std::string(&board)[6][7]) {
 	int input = 0;
 	int column = 0;
 	int player_turn = 1;
-	int ai_player = -1;
-	int human_player = -1;
-	int last_ai_x_position = -1;
-	int last_ai_y_position = -1;
 	
 	connect4_io::clear();
 	connect4_io::print("Type in your player name, player 1.\n");
@@ -107,8 +103,6 @@ void connect4_operations::hard_computer_game_loop(std::string(&board)[6][7]) {
 	int alpha = -2147483647;
 	int beta = 2147483647;
 	int player_turn = 1;
-	int last_ai_x_position = -1;
-	int last_ai_y_position = -1;
 	int ai_player = -1;
 
 	connect4_io::clear();
@@ -198,10 +192,7 @@ void connect4_operations::easy_computer_game_loop(std::string(&board)[6][7]) {
 	bool column_exist = false;
 	bool column_full = false;
 	int ai_drop_column = 0;
-	int ai_value = 0;
 	int player_turn = 1;
-	int last_ai_x_position = -1;
-	int last_ai_y_position = -1;
 	int ai_player = -1;
 
 	connect4_io::clear();
@@ -295,8 +286,6 @@ void connect4_operations::moderate_computer_game_loop(std::string(&board)[6][7])
 	int alpha = -2147483647;
 	int beta = 2147483647;
 	int player_turn = 1;
-	int last_ai_x_position = -1;
-	int last_ai_y_position = -1;
 	int ai_player = -1;
 
 	connect4_io::clear();

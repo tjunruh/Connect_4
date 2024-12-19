@@ -101,7 +101,6 @@ bool logic::columns_check_winner(int player, std::string board[6][7]) {
 bool logic::diagonal_top_left_triangle_check_winner(int player, std::string board[6][7]) {
 	int consecuative_pieces = 0;
 	int number_of_rows = 6;
-	int number_of_columns = 7;
 	std::string game_piece_slot = "";
 	if (player == 1) {
 		game_piece_slot = " X |";
@@ -133,7 +132,6 @@ bool logic::diagonal_top_left_triangle_check_winner(int player, std::string boar
 bool logic::diagonal_bottom_left_triangle_check_winner(int player, std::string board[6][7]) {
 	int consecuative_pieces = 0;
 	int number_of_rows = 6;
-	int number_of_columns = 7;
 	std::string game_piece_slot = "";
 	if (player == 1) {
 		game_piece_slot = " X |";
