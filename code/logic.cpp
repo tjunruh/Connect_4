@@ -79,7 +79,6 @@ bool logic::columns_check_winner(int player, const int (&board_data)[6][7]) {
 bool logic::diagonal_top_left_triangle_check_winner(int player, const int (&board_data)[6][7]) {
 	int consecuative_pieces = 0;
 	int number_of_rows = 6;
-	int number_of_columns = 7;
 
 	bool winner = false;
 	for (int starting_row = 0; starting_row < number_of_rows; starting_row++) {
@@ -105,7 +104,6 @@ bool logic::diagonal_top_left_triangle_check_winner(int player, const int (&boar
 bool logic::diagonal_bottom_left_triangle_check_winner(int player, const int (&board_data)[6][7]) {
 	int consecuative_pieces = 0;
 	int number_of_rows = 6;
-	int number_of_columns = 7;
 
 	bool winner = false;
 	for (int starting_row = 0; starting_row < number_of_rows; starting_row++) {

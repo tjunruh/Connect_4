@@ -149,8 +149,8 @@ void ai::get_open_columns(int (&open_columns)[7], const int (&board_data)[6][7])
 		}
 	}
 
-	for (position; position < 7; position++) {
-		open_columns[position] = -1;
+	for (int i = position; i < 7; i++) {
+		open_columns[i] = -1;
 	}
 }
 
@@ -171,7 +171,6 @@ bool ai::is_terminal_node(const int (&board_data)[6][7]) {
 int ai::score_position(const int (&board_data)[6][7], int player) {
 	int score = 0;
 	std::string center_array[6];
-	int center_count = 0;
 	std::string row_array[6];
 	std::string collumn_array[7];
 	int rows = 6;

@@ -11,9 +11,9 @@ SRCS := $(shell find $(SRC_DIR) -name *.cpp)
 OBJS := $(SRCS:%=$(BLD_DIR)/%.o)
 DEPS := $(OCJS:.o=.d)
 
-LDFLAGS := -lncurses
+LDFLAGS := -lncurses -L external_libraries/ASCII_Board_Game_Engine_v1.4.1-alpha/Linux/ -lascii_engine
 INC_FLAGS := $(addprefix -I,$(INC_DIR))
-CXXFLAGS := -std=c++17 $(LDFLAGS) -O2 $(INC_FLAGS) -Wall -MMD -MP
+CXXFLAGS := -std=c++17 $(LDFLAGS) -O2 $(INC_FLAGS) -Wall -MMD -MP -I external_libraries/ASCII_Board_Game_Engine_v1.4.1-alpha/Linux/headers/ascii_engine
 
 .PHONY: all clean
 
@@ -21,6 +21,12 @@ all: $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $@ $(LDFLAGS)
+	mkdir $(BLD_DIR)/bin
+	mv $(EXECUTABLE) $(BLD_DIR)/bin
+	cp external_libraries/ASCII_Board_Game_Engine_v1.4.1-alpha/Linux/libascii_engine.so $(BLD_DIR)/bin
+	cp -r board_configs $(BLD_DIR)/bin
+	rm -rf $(BLD_DIR)/code
+	cp Connect_4.sh $(BLD_DIR)
 
 $(BLD_DIR)/%.cpp.o: %.cpp
 	mkdir -p $(dir $@)
@@ -28,6 +34,5 @@ $(BLD_DIR)/%.cpp.o: %.cpp
 
 clean:
 	-rm -r $(BLD_DIR)
-	-rm $(EXECUTABLE)
 
 -include $(DEPS)

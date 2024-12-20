@@ -27,8 +27,6 @@ void game_operations::human_game_loop(int (&board_data)[6][7]) {
 	bool column_full = false;
 	int column = 0;
 	int player_turn = 1;
-	int ai_player = -1;
-	int human_player = -1;
 	
 	p1_username = display_manager.get_player_username("Type in your player name, player 1.");
 	p2_username = display_manager.get_player_username("Type in your player name, player 2.");
@@ -177,9 +175,6 @@ void game_operations::easy_computer_game_loop(int (&board_data)[6][7]) {
 	bool column_exist = false;
 	bool column_full = false;
 	int ai_drop_column = 0;
-	int ai_value = 0;
-	int alpha = -2147483647;
-	int beta = 2147483647;
 	int player_turn = 1;
 	int ai_player = -1;
 	int human_player = -1;
@@ -267,8 +262,6 @@ void game_operations::moderate_computer_game_loop(int (&board_data)[6][7]) {
 	int alpha = -2147483647;
 	int beta = 2147483647;
 	int player_turn = 1;
-	int last_ai_x_position = -1;
-	int last_ai_y_position = -1;
 	int ai_player = -1;
 	int human_player = -1;
 
