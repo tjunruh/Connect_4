@@ -13,28 +13,21 @@ void ai::set_human_player(int player)
 	human_player = player;
 }
 
-void ai::copy_board(std::string(&board)[6][7], std::string(&board_copy)[6][7]) {
+void ai::copy_board(int (&board_data)[6][7], int (&board_data_copy)[6][7]) {
 	for (int i = 0; i < 6; i++) {
 		for (int j = 0; j < 7; j++) {
-			board_copy[i][j] = board[i][j];
+			board_data_copy[i][j] = board_data[i][j];
 		}
 	}
 }
 
-bool ai::place_piece_for_tree(int player, int column, std::string(&board)[6][7]) {
+bool ai::place_piece_for_tree(int player, int column, int (&board_data)[6][7]) {
 	column--;
-	std::string player_slot = "";
-	if (player == 1) {
-		player_slot = " X |";
-	}
-	else if (player == 2) {
-		player_slot = " O |";
-	}
 
-	if (board[0][column] == " . |") {
+	if (board_data[0][column] == 0) {
 		for (int rows = 5; rows >= 0; rows--) {
-			if (board[rows][column] == " . |") {
-				board[rows][column] = player_slot;
+			if (board_data[rows][column] == 0) {
+				board_data[rows][column] = player;
 				break;
 			}
 		}
@@ -45,11 +38,11 @@ bool ai::place_piece_for_tree(int player, int column, std::string(&board)[6][7])
 	}
 }
 
-void ai::minimax(std::string(&board)[6][7], int& column, int& value, int depth, int alpha, int beta, bool maximizing_player) {
+void ai::minimax(int (&board)[6][7], int& column, int& value, int depth, int alpha, int beta, bool maximizing_player) {
 	int open_columns[7];
 	bool is_terminal = false;
 	int num_open_columns = 0;
-	std::string board_copy[6][7];
+	int board_copy[6][7];
 	int new_column;
 	int new_value;
 
@@ -147,47 +140,48 @@ void ai::minimax(std::string(&board)[6][7], int& column, int& value, int depth, 
 
 }
 
-void ai::get_open_columns(int(&open_columns)[7], std::string board[6][7]) {
+void ai::get_open_columns(int (&open_columns)[7], const int (&board_data)[6][7]) {
 	int position = 0;
 	for (int i = 0; i < 7; i++) {
-		if (board[0][i] == " . |") {
+		if (board_data[0][i] == 0) {
 			open_columns[position] = (i + 1);
 			position++;
 		}
 	}
 
-	for (int i = position; i < 7; i++) {
-		open_columns[i] = -1;
+	for (position; position < 7; position++) {
+		open_columns[position] = -1;
 	}
 }
 
-bool ai::is_terminal_node(std::string board[6][7]) {
+bool ai::is_terminal_node(const int (&board_data)[6][7]) {
 	bool player1_win = false;
 	bool player2_win = false;
 	bool tie = false;
 	bool is_terminal = false;
 
-	player1_win = logic_manager.check_winner(1, board);
-	player2_win = logic_manager.check_winner(2, board);
-	tie = logic_manager.cat_game(board);
+	player1_win = logic_manager.check_winner(1, board_data);
+	player2_win = logic_manager.check_winner(2, board_data);
+	tie = logic_manager.cat_game(board_data);
 
 	is_terminal = (player1_win || player2_win || tie);
 	return is_terminal;
 }
 
-int ai::score_position(std::string board[6][7], int player) {
+int ai::score_position(const int (&board_data)[6][7], int player) {
 	int score = 0;
 	std::string center_array[6];
+	int center_count = 0;
 	std::string row_array[6];
 	std::string collumn_array[7];
 	int rows = 6;
 	int collumns = 7;
-	std::string window[4];
+	int window[4];
 
 	for (int r = 0; r < rows; r++) {
 		for (int c = 0; c < (collumns - 3); c++) {
 			for (int i = 0; i < 4; i++) {
-				window[i] = board[r][c + i];
+				window[i] = board_data[r][c + i];
 			}
 			score += evaluate_window(window, player);
 		}
@@ -196,7 +190,7 @@ int ai::score_position(std::string board[6][7], int player) {
 	for (int c = 0; c < collumns; c++) {
 		for (int r = 0; r < (rows - 3); r++) {
 			for (int i = 0; i < 4; i++) {
-				window[i] = board[r + i][c];
+				window[i] = board_data[r + i][c];
 			}
 			score += evaluate_window(window, player);
 		}
@@ -205,7 +199,7 @@ int ai::score_position(std::string board[6][7], int player) {
 	for (int r = 3; r < rows; r++) {
 		for (int c = 0; c < (collumns - 3); c++) {
 			for (int i = 0; i < 4; i++) {
-				window[i] = board[r - i][c + i];
+				window[i] = board_data[r - i][c + i];
 			}
 			score += evaluate_window(window, player);
 		}
@@ -214,7 +208,7 @@ int ai::score_position(std::string board[6][7], int player) {
 	for (int r = 3; r < rows; r++) {
 		for (int c = 3; c < collumns; c++) {
 			for (int i = 0; i < 4; i++) {
-				window[i] = board[r - i][c - i];
+				window[i] = board_data[r - i][c - i];
 			}
 			score += evaluate_window(window, player);
 		}
@@ -223,56 +217,52 @@ int ai::score_position(std::string board[6][7], int player) {
 	return score;
 }
 
-int ai::evaluate_window(std::string window[4], int player) {
-	std::string opponenet_piece = "";
-	std::string player_piece = "";
-	std::string empty_slot = " . |";
+int ai::evaluate_window(int window[4], int player) {
+	int opponent = 0;
 	if (player == 1) {
-		opponenet_piece = " O |";
-		player_piece = " X |";
+		opponent = 2;
 	}
 	else if (player == 2) {
-		opponenet_piece = " X |";
-		player_piece = " O |";
+		opponent = 1;
 	}
 
 	int score = 0;
 
-	int player_piece_count = 0;
-	int opponent_player_piece_count = 0;
-	int empty_slot_count = 0;
+	int player_count = 0;
+	int opponent_count = 0;
+	int empty_count = 0;
 
 	for (int i = 0; i < 4; i++) {
-		if (window[i] == player_piece) {
-			player_piece_count++;
+		if (window[i] == player) {
+			player_count++;
 		}
 
-		if (window[i] == opponenet_piece) {
-			opponent_player_piece_count++;
+		if (window[i] == opponent) {
+			opponent_count++;
 		}
 
-		if (window[i] == empty_slot) {
-			empty_slot_count++;
+		if (window[i] == 0) {
+			empty_count++;
 		}
 	}
 
-	if (player_piece_count == 4) {
+	if (player_count == 4) {
 		score = 100;
 	}
-	else if ((player_piece_count == 3) && (empty_slot_count == 1)) {
+	else if ((player_count == 3) && (empty_count == 1)) {
 		score = 5;
 	}
-	else if ((player_piece_count == 2) && (empty_slot_count == 2)) {
+	else if ((player_count == 2) && (empty_count == 2)) {
 		score = 2;
 	}
-	else if ((opponent_player_piece_count == 3) && (empty_slot_count == 1)) {
+	else if ((opponent_count == 3) && (empty_count == 1)) {
 		score = -4;
 	}
 
 	return score;
 }
 
-void ai::run_easy_bot(std::string(&board)[6][7]) {
+void ai::run_easy_bot(int (&board)[6][7]) {
 	srand(time(NULL));
 	int upper_bound = 0;
 	int lower_bound = 0;
@@ -280,7 +270,7 @@ void ai::run_easy_bot(std::string(&board)[6][7]) {
 	bool column_full = false;
 	int column = 0;
 	zone = rand() % 6;
-	if (((zone == 0) || (zone == 1) || (zone == 2) || (zone == 3)) && ((board[0][2] == " . |") || (board[0][3] == " . |") || (board[0][4] == " . |"))) {
+	if (((zone == 0) || (zone == 1) || (zone == 2) || (zone == 3)) && ((board[0][2] == 0) || (board[0][3] == 0) || (board[0][4] == 0))) {
 		do {
 			lower_bound = 2;
 			upper_bound = 4;
@@ -290,11 +280,11 @@ void ai::run_easy_bot(std::string(&board)[6][7]) {
 	}
 	else {
 		do {
-			if ((zone == 5) && ((board[0][0] == " . |") || (board[0][1] == " . |"))) {
+			if ((zone == 5) && ((board[0][0] == 0) || (board[0][1] == 0))) {
 				lower_bound = 0;
 				upper_bound = 1;
 			}
-			else if ((zone == 6) && ((board[0][5] == " . |") || (board[0][6] == " . |"))) {
+			else if ((zone == 6) && ((board[0][5] == 0) || (board[0][6] == 0))) {
 				lower_bound = 5;
 				upper_bound = 6;
 			}

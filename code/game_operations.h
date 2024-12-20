@@ -4,38 +4,38 @@
 #include "logic.h"
 #include "ai.h"
 #include "display.h"
+#include <frame.h>
 
-#define ZERO 48;
-#define ONE 49;
-#define TWO 50;
-#define THREE 51;
-#define FOUR 52;
-#define FIVE 53;
-#define SIX 54;
-#define SEVEN 55;
+class game_operations {
 
-#ifdef _WIN32
-#define ENTER 13
-#define UP 72
-#define DOWN 80
-#elif __linux__
-#define ENTER 10
-#define UP 65
-#define DOWN 66
-#endif
+public:
+	game_operations(frame* main_display, frame* multipurpose_display);
+	void initialize_board(int (&board_data)[6][7]);
+	void human_game_loop(int (&board_data)[6][7]);
+	void hard_computer_game_loop(int (&board_data)[6][7]);
+	void easy_computer_game_loop(int (&board_data)[6][7]);
+	void moderate_computer_game_loop(int (&board_data)[6][7]);
 
-class connect4_operations {
+	const std::string logo = R"(________/\\\\\\\\\___________________________________________________________________________________________________________/\\\____)"
+		"\n"
+		R"( _____/\\\////////__________________________________________________________________________________________________________/\\\\\____)"
+		"\n"
+		R"(  ___/\\\/______________________________________________________________________________________/\\\_______________________/\\\/\\\____)"
+		"\n"
+		R"(   __/\\\_________________/\\\\\_____/\\/\\\\\\____/\\/\\\\\\_______/\\\\\\\\______/\\\\\\\\__/\\\\\\\\\\\________________/\\\/\/\\\____)"
+		"\n"
+		R"(    _\/\\\_______________/\\\///\\\__\/\\\////\\\__\/\\\////\\\____/\\\/////\\\___/\\\//////__\////\\\////_______________/\\\/__\/\\\____)"
+		"\n"
+		R"(     _\//\\\_____________/\\\__\//\\\_\/\\\__\//\\\_\/\\\__\//\\\__/\\\\\\\\\\\___/\\\____________\/\\\_________________/\\\\\\\\\\\\\\\\_)"
+		"\n"
+		R"(      __\///\\\__________\//\\\__/\\\__\/\\\___\/\\\_\/\\\___\/\\\_\//\\///////___\//\\\___________\/\\\_/\\____________\///////////\\\//__)"
+		"\n"
+		R"(       ____\////\\\\\\\\\__\///\\\\\/___\/\\\___\/\\\_\/\\\___\/\\\__\//\\\\\\\\\\__\///\\\\\\\\____\//\\\\\_______________________\/\\\____)"
+		"\n"
+		R"(        _______\/////////_____\/////_____\///____\///__\///____\///____\//////////_____\////////______\/////________________________\///_____)";
 
 private:
 	logic logic_manager;
 	ai ai_manager;
 	display display_manager;
-
-public:
-	void initialize_board(std::string(&board)[6][7]);
-	void display_menu(int selection);
-	void human_game_loop(std::string(&board)[6][7]);
-	void hard_computer_game_loop(std::string(&board)[6][7]);
-	void easy_computer_game_loop(std::string(&board)[6][7]);
-	void moderate_computer_game_loop(std::string(&board)[6][7]);
 };
