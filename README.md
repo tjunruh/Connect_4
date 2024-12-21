@@ -16,7 +16,19 @@ Console application of Connect 4. It features two player mode and one player mod
 
 # Windows
 
-The game can be installed by double clicking on the setup executable in the Installation folder.
+Clone this repository and run the following command (Note that MSbuild.exe from Visual Studio 2022 must be in the System Environment Path variable):
+
+```shell
+.\windows_make.bat
+```
+
+Then enter the newly created build directory and execute the script.
+
+```shell
+cd build
+.\Connect_4.bat
+```
+
 
 # Linux
 
@@ -29,11 +41,12 @@ sudo apt-get install libncurses5-dev libncursesw5-dev
 Simply clone this repository and run the following command:
 
 ```shell
-make
+make all
 ```
 
-Then enter
+Then enter the newly created build directory and execute the script.
 
 ```shell
-./connect4
+cd build
+./Connect_4.sh
 ```
