@@ -46,7 +46,7 @@ void display::display_board(const int (&board_data)[6][7], int last_ai_row, int 
 		}
 	}
 
-	if (last_ai_row > 0 && last_ai_column > 0)
+	if (last_ai_row >= 0 && last_ai_column >= 0)
 	{
 		board.activate_configuration("mark", last_ai_row, last_ai_column);
 	}

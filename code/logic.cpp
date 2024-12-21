@@ -253,3 +253,9 @@ int logic::get_last_ai_column()
 {
 	return last_ai_column;
 }
+
+void logic::reset_last_ai_position()
+{
+	last_ai_row = -1;
+	last_ai_column = -1;
+}

@@ -10,6 +10,7 @@ public:
 	bool place_piece(int player, int column, int (&board_data)[6][7]);
 	int get_last_ai_row();
 	int get_last_ai_column();
+	void reset_last_ai_position();
 private:
 	int ai_player = -1;
 	int last_ai_row = -1;

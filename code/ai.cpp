@@ -261,28 +261,29 @@ int ai::evaluate_window(int window[4], int player) {
 	return score;
 }
 
-void ai::run_easy_bot(int (&board)[6][7]) {
+void ai::run_easy_bot(int (&board_data)[6][7], int& column) {
 	srand(time(NULL));
 	int upper_bound = 0;
 	int lower_bound = 0;
 	int zone = 0;
 	bool column_full = false;
-	int column = 0;
+	int board_copy[6][7];
+	copy_board(board_data, board_copy);
 	do
 	{
 		zone = rand() % 6;
-		if (((zone == 0) || (zone == 1) || (zone == 2) || (zone == 3)) && ((board[0][2] == 0) || (board[0][3] == 0) || (board[0][4] == 0))) {
+		if (((zone == 0) || (zone == 1) || (zone == 2) || (zone == 3)) && ((board_copy[0][2] == 0) || (board_copy[0][3] == 0) || (board_copy[0][4] == 0))) {
 			lower_bound = 2;
 			upper_bound = 4;
 			column = (rand() % (upper_bound - lower_bound + 1)) + lower_bound;
-			column_full = logic_manager.place_piece(ai_player, column, board);
+			column_full = place_piece_for_tree(ai_player, column, board_copy);
 		}
 		else {
-			if ((zone == 5) && ((board[0][0] == 0) || (board[0][1] == 0))) {
+			if ((zone == 5) && ((board_copy[0][0] == 0) || (board_copy[0][1] == 0))) {
 				lower_bound = 0;
 				upper_bound = 1;
 			}
-			else if ((zone == 6) && ((board[0][5] == 0) || (board[0][6] == 0))) {
+			else if ((zone == 6) && ((board_copy[0][5] == 0) || (board_copy[0][6] == 0))) {
 				lower_bound = 5;
 				upper_bound = 6;
 			}
@@ -291,7 +292,7 @@ void ai::run_easy_bot(int (&board)[6][7]) {
 				upper_bound = 6;
 			}
 			column = (rand() % (upper_bound - lower_bound + 1)) + lower_bound;
-			column_full = logic_manager.place_piece(ai_player, column, board);
+			column_full = place_piece_for_tree(ai_player, column, board_copy);
 		}
 	} while (column_full);
 }

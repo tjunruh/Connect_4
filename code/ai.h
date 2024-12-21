@@ -14,7 +14,7 @@ public:
 	bool is_terminal_node(const int (&board_data)[6][7]);
 	int score_position(const int (&board_data)[6][7], int player);
 	int evaluate_window(int window[4], int player);
-	void run_easy_bot(int (&board_data)[6][7]);
+	void run_easy_bot(int (&board_data)[6][7], int& column);
 private:
 	int ai_player = -1;
 	int human_player = -1;

@@ -97,6 +97,7 @@ void game_operations::computer_game_loop(int(&board_data)[6][7], computer_level 
 	int ai_player = -1;
 	int human_player = -1;
 
+	logic_manager.reset_last_ai_position();
 	int human_player_turn = display_manager.get_player_order();
 	if (human_player_turn == ascii_io::one) {
 		human_player = 1;
@@ -135,7 +136,7 @@ void game_operations::computer_game_loop(int(&board_data)[6][7], computer_level 
 			display_manager.display_board(board_data, logic_manager.get_last_ai_row(), logic_manager.get_last_ai_column());
 			if (level == easy)
 			{
-				ai_manager.run_easy_bot(board_data);
+				ai_manager.run_easy_bot(board_data, ai_drop_column);
 			}
 			else if (level == medium)
 			{
