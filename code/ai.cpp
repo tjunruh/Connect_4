@@ -268,17 +268,16 @@ void ai::run_easy_bot(int (&board)[6][7]) {
 	int zone = 0;
 	bool column_full = false;
 	int column = 0;
-	zone = rand() % 6;
-	if (((zone == 0) || (zone == 1) || (zone == 2) || (zone == 3)) && ((board[0][2] == 0) || (board[0][3] == 0) || (board[0][4] == 0))) {
-		do {
+	do
+	{
+		zone = rand() % 6;
+		if (((zone == 0) || (zone == 1) || (zone == 2) || (zone == 3)) && ((board[0][2] == 0) || (board[0][3] == 0) || (board[0][4] == 0))) {
 			lower_bound = 2;
 			upper_bound = 4;
 			column = (rand() % (upper_bound - lower_bound + 1)) + lower_bound;
 			column_full = logic_manager.place_piece(ai_player, column, board);
-		} while (column_full);
-	}
-	else {
-		do {
+		}
+		else {
 			if ((zone == 5) && ((board[0][0] == 0) || (board[0][1] == 0))) {
 				lower_bound = 0;
 				upper_bound = 1;
@@ -293,6 +292,6 @@ void ai::run_easy_bot(int (&board)[6][7]) {
 			}
 			column = (rand() % (upper_bound - lower_bound + 1)) + lower_bound;
 			column_full = logic_manager.place_piece(ai_player, column, board);
-		} while (column_full);
-	}
+		}
+	} while (column_full);
 }
