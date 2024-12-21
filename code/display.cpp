@@ -31,7 +31,6 @@ display::display(frame* main_display, frame* multipurpose_display) :
 void display::display_board(const int (&board_data)[6][7], int last_ai_row, int last_ai_column) {
 
 	board.clear_all();
-	board.start_logging("ascii_board.log");
 	for (unsigned int i = 0; i < 6; i++)
 	{
 		for (unsigned int j = 0; j < 7; j++)
@@ -52,7 +51,6 @@ void display::display_board(const int (&board_data)[6][7], int last_ai_row, int 
 		board.activate_configuration("mark", last_ai_row, last_ai_column);
 	}
 
-	board.stop_logging();
 	board.sync();
 	main_frame->display();
 }
