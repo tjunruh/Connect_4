@@ -79,7 +79,8 @@ void game_operations::human_game_loop(int (&board_data)[6][7]) {
 	}
 }
 
-void game_operations::hard_computer_game_loop(int (&board_data)[6][7]) {
+void game_operations::computer_game_loop(int(&board_data)[6][7], computer_level level)
+{
 	using namespace std::this_thread;
 	using namespace std::chrono;
 	std::string human_user_name = "";
@@ -132,176 +133,18 @@ void game_operations::hard_computer_game_loop(int (&board_data)[6][7]) {
 		else {
 			display_manager.set_board_directions_content("Computer:\nPlace a piece by typing which column.");
 			display_manager.display_board(board_data, logic_manager.get_last_ai_row(), logic_manager.get_last_ai_column());
-			ai_manager.minimax(board_data, ai_drop_column, ai_value, 7, alpha, beta, true);
-			sleep_for(3500ms);
-			logic_manager.place_piece(ai_player, ai_drop_column, board_data);
-		}
-
-
-		winner = logic_manager.check_winner(player_turn, board_data);
-		if (winner) {
-			if (player_turn == human_player) {
-				display_manager.set_board_directions_content(human_user_name + " won!");
+			if (level == easy)
+			{
+				ai_manager.run_easy_bot(board_data);
 			}
-			else {
-				display_manager.set_board_directions_content("Computer won!");
+			else if (level == medium)
+			{
+				ai_manager.minimax(board_data, ai_drop_column, ai_value, 2, alpha, beta, true);
 			}
-			display_manager.display_board(board_data, logic_manager.get_last_ai_row(), logic_manager.get_last_ai_column());
-			ascii_io::getchar();
-		}
-		tie = logic_manager.cat_game(board_data);
-		if (tie) {
-			display_manager.set_board_directions_content("cat game\n");
-			display_manager.display_board(board_data, logic_manager.get_last_ai_row(), logic_manager.get_last_ai_column());
-			ascii_io::getchar();
-		}
-
-		if (player_turn == 1) {
-			player_turn = 2;
-		}
-		else {
-			player_turn = 1;
-		}
-	}
-}
-
-void game_operations::easy_computer_game_loop(int (&board_data)[6][7]) {
-	using namespace std::this_thread;
-	using namespace std::chrono;
-	std::string human_user_name = "";
-	bool winner = false;
-	bool tie = false;
-	int column = 0;
-	bool column_exist = false;
-	bool column_full = false;
-	int ai_drop_column = 0;
-	int player_turn = 1;
-	int ai_player = -1;
-	int human_player = -1;
-
-	int human_player_turn = display_manager.get_player_order();
-	if (human_player_turn == ascii_io::one) {
-		human_player = 1;
-		ai_player = 2;
-	}
-	else if (human_player_turn == ascii_io::two) {
-		ai_player = 1;
-		human_player = 2;
-	}
-
-	logic_manager.set_ai_player(ai_player);
-	ai_manager.set_ai_player(ai_player);
-	ai_manager.set_human_player(human_player);
-
-	human_user_name = display_manager.get_player_username("Type in your player name.");
-
-	while ((winner == false) && (tie == false)) {
-
-		if (player_turn == human_player) {
-			display_manager.set_board_directions_content(human_user_name + ":\nPlace a piece by typing which column.");
-			display_manager.display_board(board_data, logic_manager.get_last_ai_row(), logic_manager.get_last_ai_column());
-			do {
-				column = ascii_io::getchar();
-				if ((column != ascii_io::one) && (column != ascii_io::two) && (column != ascii_io::three) && (column != ascii_io::four) && (column != ascii_io::five) && (column != ascii_io::six) && (column != ascii_io::seven)) {
-					column_exist = false;
-				}
-				else {
-					column_full = logic_manager.place_piece(player_turn, column - 48, board_data);
-					column_exist = true;
-				}
-
-			} while (column_full || !column_exist);
-		}
-		else {
-			display_manager.set_board_directions_content("Computer:\nPlace a piece by typing which column.");
-			display_manager.display_board(board_data, logic_manager.get_last_ai_row(), logic_manager.get_last_ai_column());
-			ai_manager.run_easy_bot(board_data);
-			sleep_for(3500ms);
-			logic_manager.place_piece(ai_player, ai_drop_column, board_data);
-		}
-
-
-		winner = logic_manager.check_winner(player_turn, board_data);
-		if (winner) {
-			if (player_turn == human_player) {
-				display_manager.set_board_directions_content(human_user_name + " won!");
+			else if (level == hard)
+			{
+				ai_manager.minimax(board_data, ai_drop_column, ai_value, 7, alpha, beta, true);
 			}
-			else {
-				display_manager.set_board_directions_content("Computer won!");
-			}
-			display_manager.display_board(board_data, logic_manager.get_last_ai_row(), logic_manager.get_last_ai_column());
-			ascii_io::getchar();
-		}
-		tie = logic_manager.cat_game(board_data);
-		if (tie) {
-			display_manager.set_board_directions_content("cat game\n");
-			display_manager.display_board(board_data, logic_manager.get_last_ai_row(), logic_manager.get_last_ai_column());
-			ascii_io::getchar();
-		}
-
-		if (player_turn == 1) {
-			player_turn = 2;
-		}
-		else {
-			player_turn = 1;
-		}
-	}
-}
-
-void game_operations::moderate_computer_game_loop(int (&board_data)[6][7]) {
-	using namespace std::this_thread;
-	using namespace std::chrono;
-	std::string human_user_name = "";
-	bool winner = false;
-	bool tie = false;
-	int column = 0;
-	bool column_exist = false;
-	bool column_full = false;
-	int ai_drop_column = 0;
-	int ai_value = 0;
-	int alpha = -2147483647;
-	int beta = 2147483647;
-	int player_turn = 1;
-	int ai_player = -1;
-	int human_player = -1;
-
-	int human_player_turn = display_manager.get_player_order();
-	if (human_player_turn == ascii_io::one) {
-		human_player = 1;
-		ai_player = 2;
-	}
-	else if (human_player_turn == ascii_io::two) {
-		ai_player = 1;
-		human_player = 2;
-	}
-
-	logic_manager.set_ai_player(ai_player);
-	ai_manager.set_ai_player(ai_player);
-	ai_manager.set_human_player(human_player);
-
-	human_user_name = display_manager.get_player_username("Type in your player name.");
-
-	while ((winner == false) && (tie == false)) {
-
-		if (player_turn == human_player) {
-			display_manager.set_board_directions_content(human_user_name + ":\nPlace a piece by typing which column.");
-			display_manager.display_board(board_data, logic_manager.get_last_ai_row(), logic_manager.get_last_ai_column());
-			do {
-				column = ascii_io::getchar();
-				if ((column != ascii_io::one) && (column != ascii_io::two) && (column != ascii_io::three) && (column != ascii_io::four) && (column != ascii_io::five) && (column != ascii_io::six) && (column != ascii_io::seven)) {
-					column_exist = false;
-				}
-				else {
-					column_full = logic_manager.place_piece(player_turn, column - 48, board_data);
-					column_exist = true;
-				}
-
-			} while (column_full || !column_exist);
-		}
-		else {
-			display_manager.set_board_directions_content("Computer:\nPlace a piece by typing which column.");
-			display_manager.display_board(board_data, logic_manager.get_last_ai_row(), logic_manager.get_last_ai_column());
-			ai_manager.minimax(board_data, ai_drop_column, ai_value, 2, alpha, beta, true);
 			sleep_for(3500ms);
 			logic_manager.place_piece(ai_player, ai_drop_column, board_data);
 		}

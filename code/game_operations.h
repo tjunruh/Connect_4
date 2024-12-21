@@ -9,12 +9,16 @@
 class game_operations {
 
 public:
+	enum computer_level
+	{
+		easy,
+		medium,
+		hard
+	};
 	game_operations(frame* main_display, frame* multipurpose_display);
 	void initialize_board(int (&board_data)[6][7]);
 	void human_game_loop(int (&board_data)[6][7]);
-	void hard_computer_game_loop(int (&board_data)[6][7]);
-	void easy_computer_game_loop(int (&board_data)[6][7]);
-	void moderate_computer_game_loop(int (&board_data)[6][7]);
+	void computer_game_loop(int(&board_data)[6][7], computer_level level);
 
 	const std::string logo = R"(________/\\\\\\\\\___________________________________________________________________________________________________________/\\\____)"
 		"\n"

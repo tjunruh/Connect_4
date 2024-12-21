@@ -47,13 +47,13 @@ int main()
             game_manager.human_game_loop(board);
         }
         else if (selection == "Easy Computer") {
-            game_manager.easy_computer_game_loop(board);
+            game_manager.computer_game_loop(board, game_manager.easy);
         }
         else if (selection == "Moderate Computer") {
-            game_manager.moderate_computer_game_loop(board);
+            game_manager.computer_game_loop(board, game_manager.medium);
         }
         else if (selection == "Hard Computer") {
-            game_manager.hard_computer_game_loop(board);
+            game_manager.computer_game_loop(board, game_manager.hard);
         }
         else if (selection == "Exit")
         {
