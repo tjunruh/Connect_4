@@ -12,9 +12,7 @@
 
 int main()
 {
-#ifdef __linux__
-    ascii_io::ncurses_init();
-#endif
+    ascii_io::ascii_engine_init();
     std::string play_more = "";
     int board[6][7];
     frame* home_frame = new frame();
@@ -61,10 +59,9 @@ int main()
         }
     } while (1);
 
+    delete(home_frame);
     delete(main_frame);
     delete(multipurpose_frame);
     
-#ifdef __linux__
-    ascii_io::ncurses_end();
-#endif
+    ascii_io::ascii_engine_end();
 }
