@@ -5,9 +5,9 @@
 #include <chrono>
 #include <ascii_io.h>
 
-game_operations::game_operations(frame* main_display, frame* multipurpose_display) : display_manager(main_display, multipurpose_display)
+game_operations::game_operations(frame* main_display, frame* multipurpose_display, frame* settings_frame, controls* game_controls) : display_manager(main_display, multipurpose_display, settings_frame, game_controls)
 {
-
+	_game_controls = game_controls;
 }
 
 void game_operations::initialize_board(int (&board_data)[6][7]) {
@@ -42,12 +42,19 @@ void game_operations::human_game_loop(int (&board_data)[6][7]) {
 		do {
 			
 			column = ascii_io::getchar();
-			if ((column != ascii_io::one) && (column != ascii_io::two) && (column != ascii_io::three) && (column != ascii_io::four) && (column != ascii_io::five) && (column != ascii_io::six) && (column != ascii_io::seven)) {
-				column_exist = false;
-			}
-			else {
+			if ((column == ascii_io::one) || (column == ascii_io::two) || (column == ascii_io::three) || (column == ascii_io::four) || (column == ascii_io::five) || (column == ascii_io::six) || (column == ascii_io::seven)) {
 				column_full = logic_manager.place_piece(player_turn, column - 48, board_data);
 				column_exist = true;
+			}
+			else if (column == _game_controls->get_key("help"))
+			{
+				display_manager.display_set_controls();
+				display_manager.display_board(board_data, logic_manager.get_last_ai_row(), logic_manager.get_last_ai_column());
+				column_exist = false;
+			}
+			else 
+			{
+				column_exist = false;
 			}
 
 		} while (column_full || !column_exist);
@@ -121,12 +128,19 @@ void game_operations::computer_game_loop(int(&board_data)[6][7], computer_level 
 			display_manager.display_board(board_data, logic_manager.get_last_ai_row(), logic_manager.get_last_ai_column());
 			do {
 				column = ascii_io::getchar();
-				if ((column != ascii_io::one) && (column != ascii_io::two) && (column != ascii_io::three) && (column != ascii_io::four) && (column != ascii_io::five) && (column != ascii_io::six) && (column != ascii_io::seven)) {
-					column_exist = false;
-				}
-				else {
+				if ((column == ascii_io::one) || (column == ascii_io::two) || (column == ascii_io::three) || (column == ascii_io::four) || (column == ascii_io::five) || (column == ascii_io::six) || (column == ascii_io::seven)) {
 					column_full = logic_manager.place_piece(player_turn, column - 48, board_data);
 					column_exist = true;
+				}
+				else if (column == _game_controls->get_key("help"))
+				{
+					display_manager.display_set_controls();
+					display_manager.display_board(board_data, logic_manager.get_last_ai_row(), logic_manager.get_last_ai_column());
+					column_exist = false;
+				}
+				else 
+				{
+					column_exist = false;
 				}
 
 			} while (column_full || !column_exist);

@@ -5,6 +5,7 @@
 #include "ai.h"
 #include "display.h"
 #include <frame.h>
+#include <controls.h>
 
 class game_operations {
 
@@ -15,7 +16,7 @@ public:
 		medium,
 		hard
 	};
-	game_operations(frame* main_display, frame* multipurpose_display);
+	game_operations(frame* main_display, frame* multipurpose_display, frame* settings_frame, controls* game_controls);
 	void initialize_board(int (&board_data)[6][7]);
 	void human_game_loop(int (&board_data)[6][7]);
 	void computer_game_loop(int(&board_data)[6][7], computer_level level);
@@ -42,4 +43,5 @@ private:
 	logic logic_manager;
 	ai ai_manager;
 	display display_manager;
+	controls* _game_controls;
 };
