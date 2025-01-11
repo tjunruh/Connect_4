@@ -170,12 +170,20 @@ bool ai::is_terminal_node(const int (&board_data)[6][7]) {
 
 int ai::score_position(const int (&board_data)[6][7], int player) {
 	int score = 0;
-	std::string center_array[6];
-	std::string row_array[6];
-	std::string collumn_array[7];
 	int rows = 6;
 	int collumns = 7;
 	int window[4];
+	int center_count = 0;
+
+	for (int i = 0; i < rows; i++)
+	{
+		if (board_data[3][i] == player)
+		{
+			center_count++;
+		}
+	}
+
+	score = center_count * 6;
 
 	for (int r = 0; r < rows; r++) {
 		for (int c = 0; c < (collumns - 3); c++) {

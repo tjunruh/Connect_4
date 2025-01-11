@@ -71,7 +71,7 @@ void game_operations::human_game_loop(int (&board_data)[6][7]) {
 			ascii_io::getchar();
 		}
 		tie = logic_manager.cat_game(board_data);
-		if (tie) {
+		if (tie && !winner) {
 			display_manager.set_board_directions_content("cat game");
 			display_manager.display_board(board_data);
 			ascii_io::getchar();
@@ -154,11 +154,11 @@ void game_operations::computer_game_loop(int(&board_data)[6][7], computer_level 
 			}
 			else if (level == medium)
 			{
-				ai_manager.minimax(board_data, ai_drop_column, ai_value, 2, alpha, beta, true);
+				ai_manager.minimax(board_data, ai_drop_column, ai_value, 5, alpha, beta, true);
 			}
 			else if (level == hard)
 			{
-				ai_manager.minimax(board_data, ai_drop_column, ai_value, 7, alpha, beta, true);
+				ai_manager.minimax(board_data, ai_drop_column, ai_value, 10, alpha, beta, true);
 			}
 			sleep_for(3500ms);
 			logic_manager.place_piece(ai_player, ai_drop_column, board_data);
@@ -177,8 +177,8 @@ void game_operations::computer_game_loop(int(&board_data)[6][7], computer_level 
 			ascii_io::getchar();
 		}
 		tie = logic_manager.cat_game(board_data);
-		if (tie) {
-			display_manager.set_board_directions_content("cat game\n");
+		if (tie && !winner) {
+			display_manager.set_board_directions_content("cat game");
 			display_manager.display_board(board_data, logic_manager.get_last_ai_row(), logic_manager.get_last_ai_column());
 			ascii_io::getchar();
 		}
