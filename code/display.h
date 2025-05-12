@@ -18,8 +18,6 @@ public:
 	void display_set_controls();
 
 private:
-	std::vector<format_tools::index_format> build_central_element_color_structure(int color, bool bold);
-	std::vector<format_tools::index_format> build_outside_element_color_structure(int color, bool bold);
 	void reset_color(std::string control_name, int color_code);
 	void initialize_settings_menu();
 
@@ -50,12 +48,6 @@ private:
 		setting_type type = regular;
 	};
 
-	enum color_type
-	{
-		central,
-		outside
-	};
-
 	const std::vector<control_settings_menu_item> control_settings_menu_items =
 	{
 		{"up", regular},
@@ -80,7 +72,6 @@ private:
 	{
 		std::string name_id = "";
 		std::string value = "";
-		color_type type = central;
 	};
 
 	struct config_color_group
@@ -89,10 +80,5 @@ private:
 		std::vector<config_name_color_pair> groups;
 	};
 
-	std::vector<config_color_group> color_group_map
-	{
-		{"x color", {{"x", "*1*", central}}},
-		{"o color", {{"o", "*2*", central}}},
-		{"mark color", {{"mark", "*3*", outside}}}
-	};
+	std::vector<config_color_group> color_group_map = {};
 };

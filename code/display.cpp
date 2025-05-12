@@ -14,9 +14,20 @@ display::display(frame* main_display, frame* multipurpose_display, frame* settin
 	main_frame = main_display;
 	multipurpose_frame = multipurpose_display;
 	bool bold = game_controls->get_key("bold foreground");
-	board.load_configuration("board_configs/x_piece.txt", "x", -1, -1, '*', build_central_element_color_structure(_game_controls->get_key("x color"), bold));
-	board.load_configuration("board_configs/o_piece.txt", "o", -1, -1, '*', build_central_element_color_structure(_game_controls->get_key("o color"), bold));
-	board.load_configuration("board_configs/designate.txt", "mark", -1, -1, '*', build_outside_element_color_structure(_game_controls->get_key("mark color"), bold));
+	std::string x_piece_value = board.load_configuration("board_configs/x_piece.txt");
+	std::string o_piece_value = board.load_configuration("board_configs/o_piece.txt");
+	std::string mark_piece_value = board.load_configuration("board_configs/designate.txt");
+
+	std::vector<config_color_group> color_group_map
+	{
+		{"x color", {{"x", x_piece_value}}},
+		{"o color", {{"o", o_piece_value}}},
+		{"mark color", {{"mark", mark_piece_value}}}
+	};
+
+	board.add_configuration("x", -1, -1, x_piece_value, '*', format_tools::build_color_for_value(x_piece_value, '*', _game_controls->get_key("x color"), format_tools::none, bold));
+	board.add_configuration("o", -1, -1, o_piece_value, '*', format_tools::build_color_for_value(o_piece_value, '*', _game_controls->get_key("o color"), format_tools::none, bold));
+	board.add_configuration("mark", -1, -1, mark_piece_value, '*', format_tools::build_color_for_value(mark_piece_value, '*', _game_controls->get_key("mark color"), format_tools::none, bold));
 	board.set_alignment("center block");
 	board.set_spacing(5, 5, 0, 0);
 	directions_label.set_spacing(1, 1, 0, 0);
@@ -58,58 +69,6 @@ display::display(frame* main_display, frame* multipurpose_display, frame* settin
 	color_group_map[2].groups[0].value = board.load_configuration("board_configs/designate.txt");
 
 	initialize_settings_menu();
-}
-
-std::vector<format_tools::index_format> display::build_central_element_color_structure(int color, bool bold)
-{
-	std::vector<format_tools::index_format> colors;
-	if (color != format_tools::none)
-	{
-		format_tools::index_format color1;
-		color1.format.foreground_format = color;
-		color1.format.bold = bold;
-		color1.index = 2;
-		colors.push_back(color1);
-
-		format_tools::index_format color2;
-		color2.format.foreground_format = format_tools::none;
-		color2.index = 7;
-		colors.push_back(color2);
-		color1.index = 11;
-		colors.push_back(color1);
-		color2.index = 16;
-		colors.push_back(color2);
-		color1.index = 20;
-		colors.push_back(color1);
-		color2.index = 25;
-		colors.push_back(color2);
-	}
-	return colors;
-}
-
-std::vector<format_tools::index_format> display::build_outside_element_color_structure(int color, bool bold)
-{
-	std::vector<format_tools::index_format> colors;
-	if (color != format_tools::none)
-	{
-		format_tools::index_format color1;
-		color1.format.foreground_format = color;
-		color1.format.bold = bold;
-		color1.index = 9;
-		format_tools::index_format color2;
-		color2.format.foreground_format = format_tools::none;
-		color2.index = 11;
-		format_tools::index_format color3;
-		color3.format.foreground_format = color;
-		color3.format.bold = bold;
-		color3.index = 16;
-		colors.push_back(color1);
-		colors.push_back(color2);
-		colors.push_back(color3);
-		color2.index = 18;
-		colors.push_back(color2);
-	}
-	return colors;
 }
 
 void display::display_board(const int (&board_data)[6][7], int last_ai_row, int last_ai_column) {
@@ -182,14 +141,7 @@ void display::reset_color(std::string control_name, int color_code)
 			for (unsigned int j = 0; j < color_group_map[i].groups.size(); j++)
 			{
 				std::vector<format_tools::index_format> color;
-				if (color_group_map[i].groups[j].type == central)
-				{
-					color = build_central_element_color_structure(color_code, _game_controls->get_key("bold foreground"));
-				}
-				else if (color_group_map[i].groups[j].type == outside)
-				{
-					color = build_outside_element_color_structure(color_code, _game_controls->get_key("bold foreground"));
-				}
+				color = format_tools::build_color_for_value(color_group_map[i].groups[j].value, '*', color_code, format_tools::none, _game_controls->get_key("bold foreground"));
 				board.set_sub_configuration_color(color_group_map[i].groups[j].name_id, color_group_map[i].groups[j].value, color);
 			}
 		}
