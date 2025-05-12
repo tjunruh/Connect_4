@@ -4,13 +4,9 @@
 
 display::display(frame* main_display, frame* multipurpose_display, frame* settings_display, controls* game_controls) :
 	multipurpose_label(multipurpose_display),
-	left_multipurpose_spacer(multipurpose_display, 1, "new line"),
-	multipurpose_text_box(multipurpose_display, "none", 3),
-	right_multipurpose_spacer(multipurpose_display, 1),
-	board(main_display, "board_configs/connect_4_board.txt", "default"),
-	left_main_spacer(main_display, 1, "new line"),
-	directions_label(main_display),
-	right_main_spacer(main_display, 1),
+	multipurpose_text_box(multipurpose_display, "new line", 3),
+	board(main_display, "board_configs/connect_4_board.txt", "default", "none"),
+	directions_label(main_display, "new line"),
 	settings_label(settings_display),
 	settings_menu(settings_display, "new line")
 {
@@ -26,16 +22,20 @@ display::display(frame* main_display, frame* multipurpose_display, frame* settin
 	directions_label.set_spacing(1, 1, 0, 0);
 	directions_label.set_border_spacing(1, 1, 0, 0);
 	directions_label.add_border(true);
-	main_frame->set_coordinate_width_multiplier(1, 1, 1);
+	directions_label.use_spacing_width_multipliers(true);
+	directions_label.set_width_multiplier(1.0);
+	directions_label.set_spacing_width_multipliers(1.0, 1.0);
 	main_frame->enable_color(_game_controls->get_key("enable color"));
 	main_frame->enable_dec(_game_controls->get_key("enable line drawing"));
 	main_frame->set_dec_format_characters('=', '|', '+', '.');
 	main_frame->set_default_foreground_color(_game_controls->get_key("foreground color"));
 	main_frame->set_default_background_color(_game_controls->get_key("background color"));
 
-	multipurpose_frame->set_coordinate_width_multiplier(1, 1, 1);
 	multipurpose_label.set_alignment("center block");
 	multipurpose_label.set_spacing(15, 0, 0, 0);
+	multipurpose_text_box.use_spacing_width_multipliers(true);
+	multipurpose_text_box.set_width_multiplier(1.0);
+	multipurpose_text_box.set_spacing_width_multipliers(1.0, 1.0);
 	multipurpose_frame->enable_color("enable color");
 	multipurpose_frame->enable_dec(_game_controls->get_key("enable line drawing"));
 	multipurpose_frame->set_default_foreground_color(_game_controls->get_key("foreground color"));
@@ -133,7 +133,7 @@ void display::display_board(const int (&board_data)[6][7], int last_ai_row, int 
 		board.activate_configuration("mark", last_ai_row, last_ai_column);
 	}
 
-	board.sync();
+	board.build();
 	main_frame->display();
 }
 
@@ -196,29 +196,10 @@ void display::reset_color(std::string control_name, int color_code)
 
 void display::display_set_controls()
 {
-	int x = 0;
-	int y = 0;
-	bool reduced_menu_size = false;
-	ascii_io::get_terminal_size(x, y);
-	y = y / 2;
-	if ((y - 4) > 10)
-	{
-		y = y - 4;
-		reduced_menu_size = true;
-	}
-	settings_menu.set_lines_count(y);
+	settings_menu.set_lines_count(-4);
 	std::vector<int> menu_select_buttons;
 	menu_select_buttons.push_back(_game_controls->get_key("select"));
 	settings_menu.set_controls(menu_select_buttons, _game_controls->get_key("up"), _game_controls->get_key("down"), _game_controls->get_key("quit"));
-	if (reduced_menu_size)
-	{
-		settings_menu.set_spacing(2, 0, 0, 0);
-	}
-	else
-	{
-		settings_menu.set_spacing(0, 0, 0, 0);
-	}
-
 	settings_menu.remove_all_items();
 
 	for (unsigned int i = 0; i < control_settings_menu_items.size(); i++)
@@ -255,14 +236,14 @@ void display::display_set_controls()
 		settings_frame->set_default_foreground_color(_game_controls->get_key("foreground color"));
 	}
 
-	settings_menu.sync();
+	settings_menu.build();
 	settings_frame->display();
 	std::string selection = "";
 	int key_stroke = ascii_io::undefined;
 	do
 	{
 		settings_menu.get_selection(selection, key_stroke);
-		settings_menu.sync();
+		settings_menu.build();
 		for (unsigned int i = 0; i < control_settings_menu_items.size(); i++)
 		{
 			if (selection == control_settings_menu_items[i].name_id)
@@ -344,8 +325,9 @@ void display::display_set_controls()
 							reset_color(color_group_map[j].color, _game_controls->get_key(color_group_map[j].color));
 						}
 					}
-					settings_frame->display();
 				}
+				settings_menu.build();
+				settings_frame->display();
 			}
 		}
 	} while (selection != "");

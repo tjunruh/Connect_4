@@ -5,7 +5,6 @@
 #include <label.h>
 #include <frame.h>
 #include <text_box.h>
-#include <spacer.h>
 #include <controls.h>
 
 class display
@@ -24,15 +23,11 @@ private:
 	void reset_color(std::string control_name, int color_code);
 
 	label multipurpose_label;
-	spacer left_multipurpose_spacer;
 	text_box multipurpose_text_box;
-	spacer right_multipurpose_spacer;
 	frame* multipurpose_frame;
 
 	ascii_board board;
-	spacer left_main_spacer;
 	label directions_label;
-	spacer right_main_spacer;
 	frame* main_frame;
 
 	label settings_label;

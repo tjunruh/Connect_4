@@ -45,7 +45,8 @@ int main()
     initialization_menu.append_item("Exit");
     initialization_menu.disable_quit();
     initialization_menu.set_alignment("center block");
-    
+    initialization_menu.build();
+
     ascii_io::hide_cursor();
 
     do {
