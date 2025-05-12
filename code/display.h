@@ -21,6 +21,7 @@ private:
 	std::vector<format_tools::index_format> build_central_element_color_structure(int color, bool bold);
 	std::vector<format_tools::index_format> build_outside_element_color_structure(int color, bool bold);
 	void reset_color(std::string control_name, int color_code);
+	void initialize_settings_menu();
 
 	label multipurpose_label;
 	text_box multipurpose_text_box;

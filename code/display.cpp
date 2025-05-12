@@ -56,6 +56,8 @@ display::display(frame* main_display, frame* multipurpose_display, frame* settin
 	color_group_map[0].groups[0].value = board.load_configuration("board_configs/x_piece.txt");
 	color_group_map[1].groups[0].value = board.load_configuration("board_configs/o_piece.txt");
 	color_group_map[2].groups[0].value = board.load_configuration("board_configs/designate.txt");
+
+	initialize_settings_menu();
 }
 
 std::vector<format_tools::index_format> display::build_central_element_color_structure(int color, bool bold)
@@ -194,14 +196,9 @@ void display::reset_color(std::string control_name, int color_code)
 	}
 }
 
-void display::display_set_controls()
+void display::initialize_settings_menu()
 {
 	settings_menu.set_lines_count(-4);
-	std::vector<int> menu_select_buttons;
-	menu_select_buttons.push_back(_game_controls->get_key("select"));
-	settings_menu.set_controls(menu_select_buttons, _game_controls->get_key("up"), _game_controls->get_key("down"), _game_controls->get_key("quit"));
-	settings_menu.remove_all_items();
-
 	for (unsigned int i = 0; i < control_settings_menu_items.size(); i++)
 	{
 		settings_menu.append_item(control_settings_menu_items[i].name_id);
@@ -227,6 +224,13 @@ void display::display_set_controls()
 		}
 		settings_menu.set_item_label(control_settings_menu_items[i].name_id, label_name);
 	}
+}
+
+void display::display_set_controls()
+{
+	std::vector<int> menu_select_buttons;
+	menu_select_buttons.push_back(_game_controls->get_key("select"));
+	settings_menu.set_controls(menu_select_buttons, _game_controls->get_key("up"), _game_controls->get_key("down"), _game_controls->get_key("quit"));
 
 	settings_frame->enable_dec(_game_controls->get_key("enable line drawing"));
 
