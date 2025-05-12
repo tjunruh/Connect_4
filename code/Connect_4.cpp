@@ -15,7 +15,7 @@
 
 int main()
 {
-    ascii_io::ascii_engine_init();
+    ascii_io::ascii_engine_init(true);
     controls* game_controls = new controls();
     connect_4_file_management::load_controls("controls.json", game_controls);
     for (unsigned int i = 0; i < default_control_names.size(); i++)
