@@ -85,5 +85,6 @@ int main()
     delete(settings_frame);
     delete(game_controls);
 
+    ascii_io::show_cursor();
     ascii_io::ascii_engine_end();
 }
