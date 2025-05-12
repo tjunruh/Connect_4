@@ -50,3 +50,7 @@ Then enter the newly created build directory and execute the script.
 cd build
 ./Connect_4.sh
 ```
+
+# Game Instructions
+
+Pressing 'h' once in the main game loop will display the settings menu where current settings and key bindings can be viewed and changed.
