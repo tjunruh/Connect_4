@@ -14,6 +14,8 @@ ________/\\\\\\\\\______________________________________________________________
 
 Console application of Connect 4. It features two player mode and one player mode with easy, moderate, and hard computer levels.
 
+https://github.com/user-attachments/assets/41178811-defe-4713-b19b-b1ea602c0d71
+
 # Windows
 
 Clone this repository and run the following command (Note that MSbuild.exe from Visual Studio 2022 must be in the System Environment Path variable):
